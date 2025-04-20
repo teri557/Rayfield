@@ -1125,8 +1125,9 @@ end
 local function Hide(notify: boolean?)
 	if MPrompt then
 		MPrompt.Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		MPrompt.Position = UDim2.new(0.5, 0, 0, -70)
-		MPrompt.Size = UDim2.new(0, 25, 0, 10)
+		MPrompt.Title.Text = "EXUSO"
+		MPrompt.Position = UDim2.new(0.85, 0, 0, -50)
+		MPrompt.Size = UDim2.new(0, 15, 0, 10)
 		MPrompt.BackgroundTransparency = 1
 		MPrompt.Title.TextTransparency = 1
 		MPrompt.Visible = true
