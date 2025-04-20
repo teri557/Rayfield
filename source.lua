@@ -672,59 +672,6 @@ if UserInputService.TouchEnabled then
 	useMobilePrompt = true
 end
 
--- Make mobile toggle more compact and draggable
-if UserInputService.TouchEnabled then
-    -- Wait for MPrompt to be available
-    task.spawn(function()
-        -- Wait until MPrompt exists
-        repeat task.wait() until MPrompt
-        
-        -- Make it smaller and box-shaped
-        MPrompt.Size = UDim2.new(0, 40, 0, 40) -- Smaller, square shape
-        MPrompt.Position = UDim2.new(0, 20, 0, 20) -- Position in top-left
-        
-        if MPrompt:FindFirstChild("Title") then
-            MPrompt.Title.Text = "UI" -- Shorter text for compact button
-        end
-        
-        -- Make it draggable
-        local dragging = false
-        local dragStart
-        local startPos
-        
-        MPrompt.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Touch then
-                dragging = true
-                dragStart = input.Position
-                startPos = MPrompt.Position
-                
-                input.Changed:Connect(function()
-                    if input.UserInputState == Enum.UserInputState.End then
-                        dragging = false
-                    end
-                end)
-            end
-        end)
-        
-        MPrompt.InputChanged:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.Touch and dragging then
-                local delta = input.Position - dragStart
-                MPrompt.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, 
-                                           startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            end
-        end)
-        
-        -- Override the Hide function to maintain the compact size
-        local oldHide = Hide
-        Hide = function(notify)
-            if MPrompt then
-                MPrompt.Size = UDim2.new(0, 40, 0, 40) -- Keep it small
-            end
-            oldHide(notify)
-        end
-    end)
-end
-
 -- Object Variables
 
 local Main = Rayfield.Main
@@ -3665,6 +3612,59 @@ if MPrompt then
 			Unhide()
 		end
 	end)
+end
+
+-- Make mobile toggle more compact and draggable
+if UserInputService.TouchEnabled then
+    -- Wait for MPrompt to be available
+    task.spawn(function()
+        -- Wait until MPrompt exists
+        
+        
+        -- Make it smaller and box-shaped
+        MPrompt.Size = UDim2.new(0, 40, 0, 40) -- Smaller, square shape
+        MPrompt.Position = UDim2.new(0, 20, 0, 20) -- Position in top-left
+        
+        if MPrompt:FindFirstChild("Title") then
+            MPrompt.Title.Text = "UI" -- Shorter text for compact button
+        end
+        
+        -- Make it draggable
+        local dragging = false
+        local dragStart
+        local startPos
+        
+        MPrompt.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = MPrompt.Position
+                
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
+        
+        MPrompt.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.Touch and dragging then
+                local delta = input.Position - dragStart
+                MPrompt.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, 
+                                           startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end)
+        
+        -- Override the Hide function to maintain the compact size
+        local oldHide = Hide
+        Hide = function(notify)
+            if MPrompt then
+                MPrompt.Size = UDim2.new(0, 40, 0, 40) -- Keep it small
+            end
+            oldHide(notify)
+        end
+    end)
 end
 
 for _, TopbarButton in ipairs(Topbar:GetChildren()) do
